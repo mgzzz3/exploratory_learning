@@ -1,0 +1,51 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ai-everything-school-backend"
+version = "0.1.0"
+description = "AI 万物学堂 MVP FastAPI 后端"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+  "alembic>=1.16,<2",
+  "asyncmy>=0.2.10,<1",
+  "cryptography>=45,<48",
+  "fastapi>=0.116,<1",
+  "httpx>=0.28,<1",
+  "langchain-core>=1.0,<2",
+  "openai>=2,<4",
+  "pydantic>=2.11,<3",
+  "pydantic-settings>=2.10,<3",
+  "pyjwt>=2.10,<3",
+  "sqlalchemy[asyncio]>=2.0.42,<3",
+  "uvicorn[standard]>=0.35,<1",
+]
+
+[project.optional-dependencies]
+test = [
+  "aiosqlite>=0.21,<1",
+  "coverage[toml]>=7.10,<8",
+  "pytest>=8.4,<10",
+  "pytest-cov>=6.2,<8",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.pytest.ini_options]
+addopts = "-q --strict-markers"
+testpaths = ["tests"]
+markers = [
+  "mysql: requires TEST_MYSQL_DATABASE_URL and a running MySQL 8 database",
+]
+
+[tool.coverage.run]
+branch = true
+concurrency = ["thread", "greenlet"]
+source = ["app"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 85

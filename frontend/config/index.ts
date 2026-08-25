@@ -8,7 +8,7 @@ export default defineConfig<'vite'>(async (merge) => {
   const baseConfig: UserConfigExport<'vite'> = {
     projectName: 'frontend',
     date: '2026-8-20',
-    designWidth: 750,
+    designWidth: 375,
     deviceRatio: {
       640: 2.34 / 2,
       750: 1,
@@ -21,6 +21,15 @@ export default defineConfig<'vite'>(async (merge) => {
       "@tarojs/plugin-generator"
     ],
     defineConstants: {
+      APP_ENV: JSON.stringify(
+        process.env.TARO_APP_ENV_NAME || 'development'
+      ),
+      API_BASE_URL: JSON.stringify(
+        process.env.TARO_APP_API_BASE_URL || 'http://127.0.0.1:8000/api/v1'
+      ),
+      REWARDED_AD_UNIT_ID: JSON.stringify(
+        process.env.TARO_APP_AD_UNIT_ID || ''
+      )
     },
     copy: {
       patterns: [

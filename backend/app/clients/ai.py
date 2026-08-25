@@ -1,0 +1,139 @@
+from __future__ import annotations
+
+import json
+from typing import Protocol
+
+from langchain_core.prompts import ChatPromptTemplate
+from openai import AsyncOpenAI
+from pydantic import ValidationError
+
+from app.schemas.game import GeneratedGame
+
+
+class ContentGenerationError(RuntimeError):
+    pass
+
+
+class ContentGenerator(Protocol):
+    async def generate(self, topic: str) -> GeneratedGame: ...
+
+
+SYSTEM_PROMPT = """
+你是“AI 万物学堂”的课程设计老师。把用户主题转成三关中文小游戏。
+输出必须严格匹配给定 JSON Schema，不要输出 Markdown。
+规则：
+1. 恰好三关，顺序 novice、advanced、boss，每关只有一道三选一题。
+2. 介绍和错因解释必须用大白话，每次只用一个生活比喻。
+3. 三个选项必须互不相同，且只有一个正确答案。
+4. novice 讲单一基础概念；advanced 加一个条件或应用；boss 综合前两关。
+5. 文案主动、具体、带一点轻松吐槽，但不能嘲讽用户。
+6. summary 恰好三个短知识点，与三关一一对应。
+""".strip()
+
+PROMPT = ChatPromptTemplate.from_messages(
+    [
+        ("system", SYSTEM_PROMPT),
+        (
+            "human",
+            "学习主题：{topic}\n请直接生成可用于小程序闯关的 JSON 数据。{retry_hint}",
+        ),
+    ]
+)
+
+
+class DeepSeekContentGenerator:
+    def __init__(
+        self,
+        *,
+        api_key: str,
+        base_url: str,
+        model: str,
+        max_retries: int,
+    ) -> None:
+        self.client = AsyncOpenAI(api_key=api_key, base_url=base_url)
+        self.model = model
+        self.max_retries = max_retries
+
+    async def generate(self, topic: str) -> GeneratedGame:
+        last_error: Exception | None = None
+        retry_hint = ""
+        for _ in range(self.max_retries):
+            messages = PROMPT.format_messages(topic=topic, retry_hint=retry_hint)
+            system = str(messages[0].content)
+            user = str(messages[1].content)
+            try:
+                response = await self.client.responses.create(
+                    model=self.model,
+                    instructions=system,
+                    input=user,
+                    reasoning={"effort": "none"},
+                    text={
+                        "format": {
+                            "type": "json_schema",
+                            "name": "learning_game",
+                            "schema": GeneratedGame.model_json_schema(),
+                        }
+                    },
+                    max_output_tokens=4000,
+                    store=False,
+                )
+                content = response.output_text
+                if not content:
+                    raise ContentGenerationError("模型返回了空内容")
+                return GeneratedGame.model_validate_json(content)
+            except (ValidationError, json.JSONDecodeError, ContentGenerationError) as exc:
+                last_error = exc
+                retry_hint = "\n上一次输出不完整，请重新输出完整且严格符合 Schema 的 JSON。"
+            except Exception as exc:  # SDK/网络错误统一转换，API 层不泄露供应商细节
+                last_error = exc
+                retry_hint = "\n上一次请求失败，请重新生成完整 JSON。"
+        raise ContentGenerationError("模型没有返回完整关卡") from last_error
+
+
+class LocalContentGenerator:
+    async def generate(self, topic: str) -> GeneratedGame:
+        return GeneratedGame.model_validate(
+            {
+                "title": topic,
+                "levels": [
+                    {
+                        "tier": "novice",
+                        "title": "新手关",
+                        "intro": f"先抓住 {topic} 的核心：它像给一件东西贴上清楚的姓名条。",
+                        "question": "刚才这一步最重要的是什么？",
+                        "options": ["先认清核心概念", "只记复杂名词", "直接跳到最后"],
+                        "correct_option": 0,
+                        "wrong_explanation": "像行李箱没贴姓名条，看着都差不多，拿的时候当然容易认错。",
+                        "praise": "脑子到账！第一块知识已经放稳了。",
+                        "takeaway": "先认清一个核心概念",
+                    },
+                    {
+                        "tier": "advanced",
+                        "title": "进阶关",
+                        "intro": "接着看它什么时候生效，就像门卫要核对通行条件。",
+                        "question": "要正确应用这个概念，下一步该做什么？",
+                        "options": ["确认使用条件", "任何时候都照搬", "忽略实际目标"],
+                        "correct_option": 0,
+                        "wrong_explanation": "门卫不会见人就放，条件没核对，后面的动作就没有可靠依据。",
+                        "praise": "进阶关拿下，条件已经看得很清楚！",
+                        "takeaway": "确认概念的使用条件",
+                    },
+                    {
+                        "tier": "boss",
+                        "title": "Boss 战",
+                        "intro": "最后把概念和条件拼起来，像先认人再验票。",
+                        "question": "面对一个新问题，哪种做法最稳？",
+                        "options": ["先认概念再核对条件", "背一句话直接套", "跳过分析碰运气"],
+                        "correct_option": 0,
+                        "wrong_explanation": "像没看站名就上车，哪怕车跑得快，也可能离目的地越来越远。",
+                        "praise": "Boss 倒下，三关全拿下！",
+                        "takeaway": "组合概念和条件解决问题",
+                    },
+                ],
+                "summary": [
+                    "先认清核心概念",
+                    "再确认使用条件",
+                    "最后组合解决问题",
+                ],
+            }
+        )

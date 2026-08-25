@@ -11,6 +11,10 @@ declare module '*.scss';
 declare module '*.sass';
 declare module '*.styl';
 
+declare const API_BASE_URL: string;
+declare const APP_ENV: 'development' | 'production';
+declare const REWARDED_AD_UNIT_ID: string;
+
 declare namespace NodeJS {
   interface ProcessEnv {
     /** NODE 内置环境变量, 会影响到最终构建生成产物 */
@@ -23,5 +27,8 @@ declare namespace NodeJS {
      * @see https://taro-docs.jd.com/docs/next/env-mode-config#特殊环境变量-taro_app_id
      */
     TARO_APP_ID: string
+    TARO_APP_ENV_NAME?: 'development' | 'production'
+    TARO_APP_API_BASE_URL?: string
+    TARO_APP_AD_UNIT_ID?: string
   }
 }

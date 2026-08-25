@@ -1,3 +1,5 @@
 export default definePageConfig({
-  navigationBarTitleText: '首页'
+  navigationStyle: 'custom',
+  navigationBarTitleText: 'AI 万物学堂',
+  disableScroll: true
 })

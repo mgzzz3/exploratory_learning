@@ -2,14 +2,15 @@
   "miniprogramRoot": "./dist",
   "projectname": "frontend",
   "description": "探索学习小程序前端",
-  "appid": "touristappid",
+  "appid": "wx3eecf480f6e51334",
   "setting": {
-    "urlCheck": true,
+    "urlCheck": false,
     "es6": false,
     "enhance": false,
     "compileHotReLoad": false,
     "postcss": false,
-    "minified": false
+    "minified": false,
+    "minifyWXML": true
   },
   "compileType": "miniprogram"
 }

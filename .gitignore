@@ -1,0 +1,5 @@
+# 本机密钥只保存在仓库根目录，不进入版本控制。
+/.env
+/backend/.env.production
+/frontend/.env.local
+/frontend/.env.*.local
