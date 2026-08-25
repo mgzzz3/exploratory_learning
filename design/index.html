@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI 万物学堂 HTML 原型总览" />
+  <title>AI 万物学堂 · HTML 原型总览</title>
+  <link rel="stylesheet" href="prototype.css" />
+</head>
+<body>
+  <main class="page-shell">
+    <header class="page-header">
+      <div>
+        <p class="page-eyebrow">AI 万物学堂 · HTML PROTOTYPE</p>
+        <h1 class="page-title">把不会的，扔进三关里</h1>
+        <p class="page-intro">一套面向微信小程序的 AI 游戏化学习原型。视觉采用奶油纸、蜜桃橙、开心黄和海盐蓝，借用校园爆笑漫画的叙事语法，但所有角色、组件与品牌表达均为原创。</p>
+      </div>
+      <nav class="page-nav" aria-label="原型页面导航">
+        <a href="index.html" aria-current="page">总览</a>
+        <a href="01-core-flow.html">核心流程</a>
+        <a href="02-recovery-states.html">异常与复活</a>
+        <a href="03-design-system.html">设计规范</a>
+      </nav>
+    </header>
+
+    <section class="portal-grid" aria-label="原型入口">
+      <a class="portal-card" href="01-core-flow.html"><span class="portal-card__index">01</span><h2>核心学习流程</h2><p>首页、主题输入、AI 筑界、新手关、答对反馈、进阶关、Boss、通关结算和“我的”。</p><span class="portal-card__arrow">→</span></a>
+      <a class="portal-card" href="02-recovery-states.html"><span class="portal-card__index">02</span><h2>异常与复活</h2><p>大白话解释、扣血、视频复活、好友助力、内容安全、生成失败和网络失败。</p><span class="portal-card__arrow">→</span></a>
+      <a class="portal-card" href="03-design-system.html"><span class="portal-card__index">03</span><h2>设计与交互规范</h2><p>色彩、字体、漫画组件、小程序 TabBar、动效、文案、响应式与无障碍约束。</p><span class="portal-card__arrow">→</span></a>
+    </section>
+
+    <div class="section-heading"><h2>交付说明</h2></div>
+    <section class="system-grid">
+      <article class="system-panel"><h3>页面布局</h3><p>原型页桌面端每行三部手机，平板两列，手机单列。每个手机框都是一个独立、可直接评审的业务状态。</p></article>
+      <article class="system-panel"><h3>交互能力</h3><p>首页推荐标签可以自动填入主题；“我的”页面开关可切换；其余页面聚焦状态与信息层级展示。</p></article>
+      <article class="system-panel"><h3>实现边界</h3><p>当前为纯 HTML/CSS/JavaScript 原型，不依赖框架、构建工具或网络资源，可直接通过浏览器打开。</p></article>
+    </section>
+  </main>
+</body>
+</html>

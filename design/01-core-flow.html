@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI 万物学堂核心学习流程 HTML 原型" />
+  <title>AI 万物学堂 · 核心学习流程</title>
+  <link rel="stylesheet" href="prototype.css" />
+  <script src="prototype.js" defer></script>
+</head>
+<body>
+  <svg class="icon-defs" aria-hidden="true">
+    <symbol id="icon-book" viewBox="0 0 24 24"><path d="M2.8 5.5A3.5 3.5 0 0 1 6.3 2H11v17H6.3a3.5 3.5 0 0 0-3.5 3.5z"/><path d="M21.2 5.5A3.5 3.5 0 0 0 17.7 2H13v17h4.7a3.5 3.5 0 0 1 3.5 3.5z"/></symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="icon-back" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="icon-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></symbol>
+    <symbol id="icon-volume" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12"/></symbol>
+    <symbol id="icon-vibrate" viewBox="0 0 24 24"><rect x="8" y="3" width="8" height="18" rx="2"/><path d="M4 8v8M20 8v8M2 11v2M22 11v2"/></symbol>
+    <symbol id="icon-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></symbol>
+    <symbol id="icon-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="icon-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+    <symbol id="icon-chevron" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  </svg>
+
+  <main class="page-shell">
+    <header class="page-header">
+      <div>
+        <p class="page-eyebrow">CORE FLOW · MVP 主旅程</p>
+        <h1 class="page-title">从“想学”到“三关拿下”</h1>
+        <p class="page-intro">核心体验保持短、直、好玩：输入任意主题，AI 筑界，连续完成新手、进阶和 Boss 三关，最后用一张通关小报把刚学会的知识收回来。</p>
+      </div>
+      <nav class="page-nav" aria-label="原型页面导航">
+        <a href="index.html">总览</a>
+        <a href="01-core-flow.html" aria-current="page">核心流程</a>
+        <a href="02-recovery-states.html">异常与复活</a>
+        <a href="03-design-system.html">设计规范</a>
+      </nav>
+    </header>
+
+    <div class="section-heading"><h2>首页与生成</h2></div>
+    <section class="frame-grid" aria-label="首页与生成原型">
+      <article class="prototype-card">
+        <div class="frame-meta"><h3 class="frame-name">01 · 首页空态</h3><span class="frame-note">唯一主任务</span></div>
+        <div class="phone">
+          <div class="status-bar"><span>9:41</span><span class="device-status"><span class="signal-bars"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="battery"></span></span></div>
+          <div class="mini-nav"><span></span><span class="mini-nav__title"></span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div>
+          <div class="screen">
+            <span class="brand-sticker">AI 万物学堂</span>
+            <div class="home-hero">
+              <div class="mascot"><span class="mascot__mouth"></span></div>
+              <h2 class="hero-title">不会？扔进来！</h2>
+              <p class="hero-subtitle">今天想轻松学点什么？</p>
+            </div>
+            <input class="topic-field" data-topic-input aria-label="输入学习主题" placeholder="比如：Python 基础" />
+            <div class="chips" aria-label="推荐学习主题">
+              <button class="chip" data-fill-topic="Python 基础">Python 基础</button>
+              <button class="chip" data-fill-topic="高情商聊天">高情商聊天</button>
+              <button class="chip" data-fill-topic="咖啡拉花">咖啡拉花</button>
+              <button class="chip" data-fill-topic="理财小白">理财小白</button>
+            </div>
+            <button class="primary-action">开一局 · 3 关学明白</button>
+            <p class="micro-copy">AI 生成题目，随时可以退出</p>
+          </div>
+          <nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav>
+        </div>
+      </article>
+
+      <article class="prototype-card">
+        <div class="frame-meta"><h3 class="frame-name">02 · 已选择主题</h3><span class="frame-note">降低提交犹豫</span></div>
+        <div class="phone">
+          <div class="status-bar"><span>9:41</span><span class="device-status"><span class="signal-bars"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="battery"></span></span></div>
+          <div class="mini-nav"><span></span><span class="mini-nav__title"></span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div>
+          <div class="screen">
+            <span class="brand-sticker">AI 万物学堂</span>
+            <div class="home-hero">
+              <div class="mascot"><span class="mascot__mouth"></span></div>
+              <h2 class="hero-title">这题，我来出！</h2>
+              <p class="hero-subtitle">三道题，把 Python 讲明白</p>
+            </div>
+            <input class="topic-field" data-topic-input aria-label="输入学习主题" value="Python 基础" />
+            <div class="chips"><button class="chip" data-fill-topic="Python 基础">Python 基础</button><button class="chip" data-fill-topic="高情商聊天">高情商聊天</button><button class="chip" data-fill-topic="咖啡拉花">咖啡拉花</button><button class="chip" data-fill-topic="理财小白">理财小白</button></div>
+            <button class="primary-action">生成我的闯关</button>
+            <p class="micro-copy">预计 5～10 秒完成</p>
+          </div>
+          <nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav>
+        </div>
+      </article>
+
+      <article class="prototype-card">
+        <div class="frame-meta"><h3 class="frame-name">03 · AI 正在筑界</h3><span class="frame-note">等待也有剧情</span></div>
+        <div class="phone">
+          <div class="status-bar"><span>9:41</span><span class="device-status"><span class="signal-bars"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="battery"></span></span></div>
+          <div class="mini-nav"><button class="mini-nav__back" aria-label="返回"><svg class="icon"><use href="#icon-back"/></svg></button><span class="mini-nav__title">正在筑界</span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div>
+          <div class="screen">
+            <div class="loading-stage">
+              <div>
+                <div class="loading-doodle"><span class="loading-book"></span><span class="loading-pencil"></span></div>
+                <div class="loading-copy"><h3>正在把 Python<br />讲成人话……</h3><p>搭关卡 · 挑比喻 · 藏 Boss</p></div>
+              </div>
+            </div>
+            <div class="progress progress--large" role="progressbar" aria-valuenow="64" aria-valuemin="0" aria-valuemax="100"><div class="progress__bar" style="width:64%"></div></div>
+            <p class="micro-copy">偷看一句：变量就像给东西贴姓名条。</p>
+          </div>
+          <nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav>
+        </div>
+      </article>
+    </section>
+
+    <div class="section-heading"><h2>三关对话闯关</h2></div>
+    <section class="frame-grid" aria-label="三关学习原型">
+      <article class="prototype-card">
+        <div class="frame-meta"><h3 class="frame-name">04 · 新手关</h3><span class="frame-note">先懂再答</span></div>
+        <div class="phone">
+          <div class="status-bar"><span>9:41</span><span class="device-status"><span class="signal-bars"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="battery"></span></span></div>
+          <div class="mini-nav"><button class="mini-nav__back" aria-label="返回"><svg class="icon"><use href="#icon-back"/></svg></button><span class="mini-nav__title">Python 基础</span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div>
+          <div class="screen">
+            <div class="game-hud"><span class="level-badge">第 1 关 · 新手</span><div class="progress"><div class="progress__bar" style="width:18%"></div></div><span class="hearts">♥♥♥</span></div>
+            <div class="chat">
+              <div class="chat-row"><div class="mascot mascot--small"><span class="mascot__mouth"></span></div><div class="bubble"><span class="bubble__label">小万老师</span>变量像贴了名字的收纳盒。名字不变，里面装的东西可以换。</div></div>
+              <div class="bubble bubble--question"><span class="bubble__label">来一道送分题</span>哪一句是在创建名叫 age 的变量？</div>
+            </div>
+            <div class="options"><button class="option"><span class="option__key">A</span><span>age = 18</span><span class="option__state"></span></button><button class="option"><span class="option__key">B</span><span>18 = age</span><span></span></button><button class="option"><span class="option__key">C</span><span>age == 18</span><span></span></button></div>
+          </div>
+          <nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav>
+        </div>
+      </article>
+
+      <article class="prototype-card">
+        <div class="frame-meta"><h3 class="frame-name">05 · 答对反馈</h3><span class="frame-note">一次强反馈</span></div>
+        <div class="phone">
+          <div class="status-bar"><span>9:41</span><span class="device-status"><span class="signal-bars"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="battery"></span></span></div>
+          <div class="mini-nav"><button class="mini-nav__back" aria-label="返回"><svg class="icon"><use href="#icon-back"/></svg></button><span class="mini-nav__title">Python 基础</span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div>
+          <div class="screen">
+            <div class="game-hud"><span class="level-badge">第 1 关 · 通过</span><div class="progress"><div class="progress__bar" style="width:33%"></div></div><span class="hearts">♥♥♥</span></div>
+            <div class="success-burst"><div class="stamp">脑子到账！</div></div>
+            <div class="bubble"><span class="bubble__label">小万老师</span>漂亮！<strong>age = 18</strong> 就是给 age 这个盒子放进数字 18。</div>
+            <div class="options"><button class="option option--correct"><span class="option__key">A</span><span>age = 18</span><svg class="icon option__state"><use href="#icon-check"/></svg></button></div>
+            <p class="micro-copy">2 秒后自动进入进阶关</p>
+          </div>
+          <nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav>
+        </div>
+      </article>
+
+      <article class="prototype-card">
+        <div class="frame-meta"><h3 class="frame-name">06 · 进阶关</h3><span class="frame-note">生活化比喻</span></div>
+        <div class="phone">
+          <div class="status-bar"><span>9:41</span><span class="device-status"><span class="signal-bars"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="battery"></span></span></div>
+          <div class="mini-nav"><button class="mini-nav__back" aria-label="返回"><svg class="icon"><use href="#icon-back"/></svg></button><span class="mini-nav__title">Python 基础</span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div>
+          <div class="screen">
+            <div class="game-hud"><span class="level-badge">第 2 关 · 进阶</span><div class="progress"><div class="progress__bar" style="width:52%"></div></div><span class="hearts">♥♥♥</span></div>
+            <div class="chat"><div class="chat-row"><div class="mascot mascot--small"><span class="mascot__mouth"></span></div><div class="bubble">if 像门口的保安：条件对了才放你进去。</div></div><div class="bubble bubble--question"><span class="bubble__label">看门卫脸色</span>下面哪段代码会在 age 大于等于 18 时打印“成年”？</div></div>
+            <div class="options"><button class="option"><span class="option__key">A</span><span>if age &gt;= 18</span><span></span></button><button class="option"><span class="option__key">B</span><span>if age &lt; 18</span><span></span></button><button class="option"><span class="option__key">C</span><span>age == print()</span><span></span></button></div>
+          </div>
+          <nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav>
+        </div>
+      </article>
+
+      <article class="prototype-card">
+        <div class="frame-meta"><h3 class="frame-name">07 · Boss 战</h3><span class="frame-note">结构不变，气氛升压</span></div>
+        <div class="phone phone--boss">
+          <div class="status-bar"><span>9:41</span><span class="device-status"><span class="signal-bars"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="battery"></span></span></div>
+          <div class="mini-nav"><button class="mini-nav__back" aria-label="返回"><svg class="icon"><use href="#icon-back"/></svg></button><span class="mini-nav__title">Python 基础</span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div>
+          <div class="screen">
+            <div class="game-hud"><span class="level-badge">第 3 关 · Boss</span><div class="progress"><div class="progress__bar" style="width:84%"></div></div><span class="hearts">♥♥♥</span></div>
+            <div class="boss-banner">期末大魔王</div>
+            <div class="bubble bubble--question">变量和条件都到齐了。哪段代码会在 age ≥ 18 时正确打印“成年”？</div>
+            <div class="options"><button class="option"><span class="option__key">A</span><span>if age &gt;= 18:<br />　print('成年')</span><span></span></button><button class="option"><span class="option__key">B</span><span>if age &lt; 18:<br />　print('成年')</span><span></span></button><button class="option"><span class="option__key">C</span><span>age == print('成年')</span><span></span></button></div>
+          </div>
+          <nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav>
+        </div>
+      </article>
+
+      <article class="prototype-card">
+        <div class="frame-meta"><h3 class="frame-name">08 · 通关结算</h3><span class="frame-note">回收学习成果</span></div>
+        <div class="phone">
+          <div class="status-bar"><span>9:41</span><span class="device-status"><span class="signal-bars"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="battery"></span></span></div>
+          <div class="mini-nav"><button class="mini-nav__back" aria-label="返回"><svg class="icon"><use href="#icon-back"/></svg></button><span class="mini-nav__title">通关小报</span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div>
+          <div class="screen">
+            <div class="completion-hero"><div class="stamp">Python 萌新毕业</div><h2 class="completion-title">三关，全拿下！</h2><p class="hero-subtitle">本局用时 2 分 18 秒</p></div>
+            <div class="completion-sheet"><p>✓ 变量是有名字的收纳盒</p><p>✓ if 是只认条件的门卫</p><p>✓ 缩进决定谁归 if 管</p></div>
+            <button class="primary-action">再学一个主题</button>
+            <button class="secondary-action" style="margin-top:10px"><svg class="icon"><use href="#icon-share"/></svg>分享通关小报</button>
+          </div>
+          <nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav>
+        </div>
+      </article>
+
+      <article class="prototype-card">
+        <div class="frame-meta"><h3 class="frame-name">09 · 我的</h3><span class="frame-note">概览与设置</span></div>
+        <div class="phone">
+          <div class="status-bar"><span>9:41</span><span class="device-status"><span class="signal-bars"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="battery"></span></span></div>
+          <div class="mini-nav"><span></span><span class="mini-nav__title">我的</span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div>
+          <div class="screen">
+            <div class="profile"><div class="profile__avatar">万</div><div><h3>好学的小万</h3><p>今天也要轻松学一点</p></div></div>
+            <div class="stats"><div class="stat"><strong>6 局</strong><span>已经通关</span></div><div class="stat"><strong>18 个</strong><span>学会知识点</span></div></div>
+            <h3 class="setting-title">学习设置</h3>
+            <div class="settings">
+              <button class="setting-row" type="button"><span class="setting-row__main"><span class="setting-row__icon"><svg class="icon icon--small"><use href="#icon-volume"/></svg></span>学习音效</span><span class="switch switch--on" data-switch role="switch" aria-checked="true"></span></button>
+              <button class="setting-row" type="button"><span class="setting-row__main"><span class="setting-row__icon"><svg class="icon icon--small"><use href="#icon-vibrate"/></svg></span>振动反馈</span><span class="switch switch--on" data-switch role="switch" aria-checked="true"></span></button>
+              <button class="setting-row" type="button"><span class="setting-row__main"><span class="setting-row__icon"><svg class="icon icon--small"><use href="#icon-bell"/></svg></span>每日学习提醒</span><span class="setting-value">未设置　›</span></button>
+              <button class="setting-row" type="button"><span class="setting-row__main"><span class="setting-row__icon"><svg class="icon icon--small"><use href="#icon-shield"/></svg></span>内容与隐私</span><svg class="icon icon--small setting-value"><use href="#icon-chevron"/></svg></button>
+              <button class="setting-row" type="button"><span class="setting-row__main"><span class="setting-row__icon"><svg class="icon icon--small"><use href="#icon-info"/></svg></span>关于 AI 万物学堂</span><span class="setting-value">v0.1　›</span></button>
+            </div>
+          </div>
+          <nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

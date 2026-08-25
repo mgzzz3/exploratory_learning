@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI 万物学堂视觉与交互设计规范" />
+  <title>AI 万物学堂 · 设计规范</title>
+  <link rel="stylesheet" href="prototype.css" />
+</head>
+<body>
+  <svg class="icon-defs" aria-hidden="true">
+    <symbol id="icon-book" viewBox="0 0 24 24"><path d="M2.8 5.5A3.5 3.5 0 0 1 6.3 2H11v17H6.3a3.5 3.5 0 0 0-3.5 3.5z"/><path d="M21.2 5.5A3.5 3.5 0 0 0 17.7 2H13v17h4.7a3.5 3.5 0 0 1 3.5 3.5z"/></symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  </svg>
+
+  <main class="page-shell">
+    <header class="page-header">
+      <div>
+        <p class="page-eyebrow">DESIGN SYSTEM · 暖色校园漫画语法</p>
+        <h1 class="page-title">好玩，但不妨碍学习</h1>
+        <p class="page-intro">漫画感集中用在角色、对白和反馈；导航、表单与设置遵循微信小程序的熟悉结构。每个颜色、边框与动效都有明确职责，避免把整页做成装饰画。</p>
+      </div>
+      <nav class="page-nav" aria-label="原型页面导航">
+        <a href="index.html">总览</a>
+        <a href="01-core-flow.html">核心流程</a>
+        <a href="02-recovery-states.html">异常与复活</a>
+        <a href="03-design-system.html" aria-current="page">设计规范</a>
+      </nav>
+    </header>
+
+    <section class="system-grid" aria-label="基础视觉规范">
+      <article class="system-panel">
+        <h2>色彩</h2>
+        <p>奶油色承担大面积背景，蜜桃橙只用于关键动作与当前状态，黄色负责奖励，海盐蓝负责解释和辅助信息。</p>
+        <div class="swatches">
+          <div class="swatch"><span class="swatch__color" style="--swatch:#fff4d8"></span><div><strong>奶油纸</strong><span>#FFF4D8 · 主背景</span></div></div>
+          <div class="swatch"><span class="swatch__color" style="--swatch:#ff8a5b"></span><div><strong>蜜桃橙</strong><span>#FF8A5B · 主操作</span></div></div>
+          <div class="swatch"><span class="swatch__color" style="--swatch:#ffd166"></span><div><strong>开心黄</strong><span>#FFD166 · 奖励反馈</span></div></div>
+          <div class="swatch"><span class="swatch__color" style="--swatch:#58b8c9"></span><div><strong>海盐蓝</strong><span>#58B8C9 · AI 解释</span></div></div>
+          <div class="swatch"><span class="swatch__color" style="--swatch:#fffdf5"></span><div><strong>对白纸</strong><span>#FFFDF5 · 内容承载</span></div></div>
+          <div class="swatch"><span class="swatch__color" style="--swatch:#49352f"></span><div><strong>可可墨</strong><span>#49352F · 文字与轮廓</span></div></div>
+        </div>
+      </article>
+
+      <article class="system-panel">
+        <h2>字体角色</h2>
+        <p>标题需要漫画情绪，正文优先可读性，状态与按钮保持小程序原生感。</p>
+        <div class="type-sample type-sample--display">不会？扔进来！</div>
+        <div class="type-sample type-sample--body">变量像贴了名字的收纳盒，名字不变，里面装的东西可以换。</div>
+        <div class="type-sample"><strong>第 2 关 · 进阶</strong><br /><span style="color:var(--muted);font-size:12px">PingFang SC · 状态、按钮、数据</span></div>
+      </article>
+
+      <article class="system-panel">
+        <h2>形状与签名</h2>
+        <p>记忆点是“撕页对白 + 批改章”。不使用统一圆角卡片；边缘略微不规则，但按钮点击面积和信息对齐保持稳定。</p>
+        <div class="component-stack">
+          <div class="component-demo"><div class="bubble">if 像门口的保安：条件对了才放你进去。</div></div>
+          <div class="component-demo"><div class="stamp">脑子到账！</div></div>
+          <div class="component-demo"><span class="brand-sticker">AI 万物学堂</span></div>
+        </div>
+      </article>
+
+      <article class="system-panel system-panel--span-2">
+        <h2>核心组件</h2>
+        <div class="component-stack">
+          <div class="component-demo"><button class="primary-action">生成我的闯关</button></div>
+          <div class="component-demo"><button class="secondary-action secondary-action--blue">呼叫朋友帮忙</button></div>
+          <div class="component-demo"><div class="chips"><button class="chip">Python 基础</button><button class="chip">高情商聊天</button><button class="chip">咖啡拉花</button></div></div>
+          <div class="component-demo"><button class="option"><span class="option__key">A</span><span>age = 18</span><span></span></button></div>
+          <div class="component-demo"><button class="option option--correct"><span class="option__key">A</span><span>age = 18</span><svg class="icon"><use href="#icon-check"/></svg></button></div>
+          <div class="component-demo"><div class="game-hud"><span class="level-badge">第 1 关 · 新手</span><div class="progress"><div class="progress__bar" style="width:33%"></div></div><span class="hearts">♥♥♥</span></div></div>
+        </div>
+      </article>
+
+      <article class="system-panel">
+        <h2>小程序 TabBar</h2>
+        <p>导航本身不做漫画化。使用白底、浅分隔线、线性图标和单色高亮，保持用户熟悉的微信小程序操作感。</p>
+        <nav class="tabbar tabbar--demo" aria-label="TabBar 示例"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav>
+      </article>
+
+      <article class="system-panel">
+        <h2>动效节奏</h2>
+        <ul class="motion-list">
+          <li><strong>筑界</strong><span>铅笔来回书写，循环 1.8 秒；不是通用旋转加载。</span></li>
+          <li><strong>答对</strong><span>批改章弹入一次，进度条同步前进，随后自动进入下一关。</span></li>
+          <li><strong>答错</strong><span>错误选项轻微震动一次，大白话解释从底部进入。</span></li>
+          <li><strong>归零</strong><span>三颗心依次熄灭，充能弹窗随后出现。</span></li>
+        </ul>
+      </article>
+
+      <article class="system-panel">
+        <h2>文案语气</h2>
+        <p><strong>主动、具体、带一点吐槽。</strong></p>
+        <p>按钮写“重新生成”，不写“提交”；错误写“检查 Wi-Fi 后重试”，不写“系统异常”；夸奖保持一句，不连续刷屏。</p>
+        <div class="teacher-note">比喻服务于理解，不为搞笑而搞笑。每次解释只使用一个生活场景。</div>
+      </article>
+
+      <article class="system-panel">
+        <h2>响应式与无障碍</h2>
+        <p>≥1020px 一行三列；721～1019px 两列；≤720px 单列。手机框最大宽度 360px，不随桌面无限放大。</p>
+        <p>交互元素保留键盘焦点；颜色状态同时使用文字或图标；支持减少动态效果；正文字号不低于 14px。</p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
