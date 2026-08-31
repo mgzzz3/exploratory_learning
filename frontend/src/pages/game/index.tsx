@@ -6,6 +6,9 @@ import { AppShell } from '../../components/AppShell'
 import { Mascot } from '../../components/Mascot'
 import { PrimaryButton, SecondaryButton } from '../../components/ActionButton'
 import { StatusState } from '../../components/StatusState'
+import { SourcePanel } from '../../components/SourcePanel'
+import { VerificationNotice } from '../../components/VerificationNotice'
+import { getGameVerification } from '../../services/gameVerification'
 import { api } from '../../services/api'
 import { ensureLogin } from '../../services/auth'
 import { ApiError } from '../../services/request'
@@ -212,18 +215,24 @@ export default function GamePage() {
   }
 
   if (game.status === 'completed') {
+    const verification = getGameVerification(game)
+    const hasSources = verification.sources.length > 0
     return (
       <AppShell title='通关小报' back onBack={quit} className='game-screen'>
-        <View className='completion-hero'>
-          <Text className='stamp'>{game.topic} 萌新毕业</Text>
+        {verification.isBasic && <VerificationNotice />}
+        <View className={`completion-hero ${hasSources ? 'completion-hero--compact' : ''}`}>
+          <Text className='stamp'>{verification.isBasic ? '三关练习完成' : hasSources ? '最新资料已验明' : `${game.topic} 萌新毕业`}</Text>
           <Text className='completion-title'>三关，全拿下！</Text>
-          <Text className='hero-subtitle'>本局用时 {elapsed(game.elapsed_seconds)}</Text>
+          {verification.isBasic ? <Text className='hero-subtitle'>{game.topic} · 基础知识</Text>
+            : !hasSources && <Text className='hero-subtitle'>本局用时 {elapsed(game.elapsed_seconds)}</Text>}
         </View>
-        <View className='completion-sheet'>
+        <View className={`completion-sheet ${hasSources ? 'completion-sheet--compact' : ''}`}>
           {game.summary.map((item) => <Text className='completion-sheet__line' key={item}>✓ {item}</Text>)}
         </View>
-        <PrimaryButton onClick={quit}>再学一个主题</PrimaryButton>
-        <SecondaryButton className='action-gap' openType='share'>↗ 分享通关小报</SecondaryButton>
+        <SourcePanel retrievedAt={verification.retrievedAt} sources={verification.sources} />
+        {verification.isBasic && <Text className='basic-result-copy'>本局由 AI 生成，未经联网核验。{'\n'}完成练习不代表内容已获事实核验。</Text>}
+        <PrimaryButton className={hasSources ? 'result-action' : ''} onClick={quit}>再学一个主题</PrimaryButton>
+        {!verification.isBasic && <SecondaryButton className='action-gap' openType='share'>↗ 分享通关小报</SecondaryButton>}
       </AppShell>
     )
   }
@@ -236,6 +245,7 @@ export default function GamePage() {
       onBack={quit}
       className={`game-screen ${level?.tier === 'boss' ? 'app-shell--boss' : ''}`}
     >
+      {getGameVerification(game).isBasic && <VerificationNotice />}
       <View className='game-hud'>
         <Text className='level-badge'>{feedback === 'correct' ? `第 ${game.current_level + 1} 关 · 通过` : levelLabel(game)}</Text>
         <View className='progress'><View className='progress__bar' style={{ width: `${feedback === 'correct' ? 33 + game.current_level * 33 : game.progress}%` }} /></View>

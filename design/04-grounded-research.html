@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI 万物学堂联网出题与参考资料 HTML 原型" />
+  <title>AI 万物学堂 · 联网出题与来源</title>
+  <link rel="stylesheet" href="prototype.css" />
+</head>
+<body>
+  <svg class="icon-defs" aria-hidden="true">
+    <symbol id="icon-book" viewBox="0 0 24 24"><path d="M2.8 5.5A3.5 3.5 0 0 1 6.3 2H11v17H6.3a3.5 3.5 0 0 0-3.5 3.5z"/><path d="M21.2 5.5A3.5 3.5 0 0 0 17.7 2H13v17h4.7a3.5 3.5 0 0 1 3.5 3.5z"/></symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="icon-back" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+    <symbol id="icon-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></symbol>
+    <symbol id="icon-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></symbol>
+    <symbol id="icon-alert" viewBox="0 0 24 24"><path d="M10.3 3.7 2.5 17.2A2 2 0 0 0 4.2 20h15.6a2 2 0 0 0 1.7-2.8L13.7 3.7a2 2 0 0 0-3.4 0"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="icon-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0 2 5.3"/><path d="M20 4v7h-7"/></symbol>
+    <symbol id="icon-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M15 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h3"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  </svg>
+
+  <main class="page-shell">
+    <header class="page-header">
+      <div>
+        <p class="page-eyebrow">GROUNDED FLOW · 联网出题评审门禁</p>
+        <h1 class="page-title">先把资料找对，再把题目出对</h1>
+        <p class="page-intro">关键词会搜索近期资料，网址会优先读取用户指定的整张页面。所有失败状态保留原输入并告诉用户下一步；只有真正有来源的游戏才在通关页展示参考资料。</p>
+      </div>
+      <nav class="page-nav" aria-label="原型页面导航">
+        <a href="index.html">总览</a>
+        <a href="01-core-flow.html">核心流程</a>
+        <a href="02-recovery-states.html">异常与复活</a>
+        <a href="04-grounded-research.html" aria-current="page">联网出题</a>
+        <a href="03-design-system.html">设计规范</a>
+      </nav>
+    </header>
+
+    <div class="section-heading"><h2>输入与读取</h2></div>
+    <section class="frame-grid" aria-label="联网输入与加载状态">
+      <article class="prototype-card">
+        <div class="frame-meta"><h3 class="frame-name">01 · 长网址输入</h3><span class="frame-note">完整保留，不撑破布局</span></div>
+        <div class="phone">
+          <div class="status-bar"><span>9:41</span><span class="device-status"><span class="signal-bars"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="battery"></span></span></div>
+          <div class="mini-nav"><span></span><span class="mini-nav__title"></span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div>
+          <div class="screen">
+            <span class="brand-sticker">AI 万物学堂</span>
+            <div class="home-hero home-hero--compact"><div class="mascot mascot--compact"><span class="mascot__mouth"></span></div><h2 class="hero-title">网页也能扔进来！</h2><p class="hero-subtitle">我会先读懂页面，再搭三关</p></div>
+            <label class="field-label" for="learning-url">知识关键词或公开网页</label>
+            <div class="input-shell input-shell--url"><span class="input-kind"><svg class="icon icon--small"><use href="#icon-link"/></svg>网页</span><textarea id="learning-url" class="topic-field topic-field--long" rows="3">https://docs.langchain.com/oss/python/integrations/tools/tavily_extract?utm_source=notes&amp;chapter=full-page-content</textarea><span class="field-count">118 / 2048</span></div>
+            <p class="field-help">支持公开 HTTP(S) 页面；需要登录的页面无法读取</p>
+            <button class="primary-action">读取网页 · 生成三关</button>
+            <p class="micro-copy">原网址会保留，失败后不用重新粘贴</p>
+          </div>
+          <nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav>
+        </div>
+      </article>
+
+      <article class="prototype-card">
+        <div class="frame-meta"><h3 class="frame-name">02 · 搜索关键词</h3><span class="frame-note">keyword · grounded</span></div>
+        <div class="phone">
+          <div class="status-bar"><span>9:41</span><span class="device-status"><span class="signal-bars"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="battery"></span></span></div>
+          <div class="mini-nav"><button class="mini-nav__back" aria-label="返回"><svg class="icon"><use href="#icon-back"/></svg></button><span class="mini-nav__title">正在找资料</span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div>
+          <div class="screen">
+            <div class="loading-stage loading-stage--research"><div><div class="research-doodle"><span class="research-paper"></span><svg class="icon research-glass"><use href="#icon-search"/></svg><i class="evidence-dot evidence-dot--one"></i><i class="evidence-dot evidence-dot--two"></i><i class="evidence-dot evidence-dot--three"></i></div><div class="loading-copy"><span class="loading-kicker">HARNESS ENGINEERING</span><h3>正在搜索最新资料</h3><p>找来源 · 对解释 · 挑证据</p></div></div></div>
+            <div class="research-steps" aria-label="搜索进度"><span class="is-done"><svg class="icon icon--small"><use href="#icon-check"/></svg>识别主题</span><span class="is-active">核对来源</span><span>搭建关卡</span></div>
+            <p class="micro-copy">复杂主题可能需要多查几次，最长约 90 秒</p>
+          </div>
+          <nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav>
+        </div>
+      </article>
+
+      <article class="prototype-card">
+        <div class="frame-meta"><h3 class="frame-name">03 · 读取整页</h3><span class="frame-note">url · grounded</span></div>
+        <div class="phone">
+          <div class="status-bar"><span>9:41</span><span class="device-status"><span class="signal-bars"><i></i><i></i><i></i><i></i></span><span>5G</span><span class="battery"></span></span></div>
+          <div class="mini-nav"><button class="mini-nav__back" aria-label="返回"><svg class="icon"><use href="#icon-back"/></svg></button><span class="mini-nav__title">正在读网页</span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div>
+          <div class="screen">
+            <div class="loading-stage loading-stage--research"><div><div class="page-reading"><svg class="icon"><use href="#icon-file"/></svg><span class="reading-line"></span><span class="reading-line reading-line--short"></span><span class="reading-scan"></span></div><div class="loading-copy"><span class="loading-kicker">DOCS.LANGCHAIN.COM</span><h3>正在读取这张网页</h3><p>读正文 · 找重点 · 核对事实</p></div></div></div>
+            <div class="preserved-input"><svg class="icon icon--small"><use href="#icon-link"/></svg><span>docs.langchain.com/oss/python/…</span></div>
+            <p class="micro-copy">会优先使用你提供的页面，不会偷换成别的主题</p>
+          </div>
+          <nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav>
+        </div>
+      </article>
+    </section>
+
+    <div class="section-heading"><h2>业务错误 · 输入全部保留</h2></div>
+    <section class="frame-grid" aria-label="grounded 业务错误原型">
+      <article class="prototype-card"><div class="frame-meta"><h3 class="frame-name">04 · 地址不安全</h3><span class="error-code">INVALID_SOURCE_URL</span></div><div class="phone"><div class="status-bar"><span>9:41</span><span>5G　<span class="battery"></span></span></div><div class="mini-nav"><button class="mini-nav__back" aria-label="返回"><svg class="icon"><use href="#icon-back"/></svg></button><span class="mini-nav__title">网页没打开</span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div><div class="screen"><div class="error-state error-state--research"><div><div class="state-illustration state-illustration--red"><svg class="icon state-icon"><use href="#icon-link"/></svg></div><h2 class="state-title">这个地址不能读取</h2><p class="state-copy">请换成不含账号、密码或私有地址的<br />公开 HTTP(S) 网页。</p><div class="preserved-input"><svg class="icon icon--small"><use href="#icon-link"/></svg><span>http://192.168.1.8/private</span></div><button class="primary-action">修改网址</button></div></div></div><nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav></div></article>
+
+      <article class="prototype-card"><div class="frame-meta"><h3 class="frame-name">05 · 页面不可读</h3><span class="error-code">PAGE_UNREADABLE</span></div><div class="phone"><div class="status-bar"><span>9:41</span><span>5G　<span class="battery"></span></span></div><div class="mini-nav"><button class="mini-nav__back" aria-label="返回"><svg class="icon"><use href="#icon-back"/></svg></button><span class="mini-nav__title">网页没读完</span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div><div class="screen"><div class="error-state error-state--research"><div><div class="state-illustration"><svg class="icon state-icon"><use href="#icon-file"/></svg></div><h2 class="state-title">页面内容没读出来</h2><p class="state-copy">它可能需要登录、正文为空，<br />或者内容太大了。</p><div class="preserved-input"><svg class="icon icon--small"><use href="#icon-link"/></svg><span>example.com/member/article</span></div><button class="primary-action"><svg class="icon"><use href="#icon-refresh"/></svg>再读一次</button><button class="secondary-action action-gap">换一个网址</button></div></div></div><nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav></div></article>
+
+      <article class="prototype-card"><div class="frame-meta"><h3 class="frame-name">06 · 主题有歧义</h3><span class="error-code">TOPIC_AMBIGUOUS</span></div><div class="phone"><div class="status-bar"><span>9:41</span><span>5G　<span class="battery"></span></span></div><div class="mini-nav"><button class="mini-nav__back" aria-label="返回"><svg class="icon"><use href="#icon-back"/></svg></button><span class="mini-nav__title">需要你定个方向</span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div><div class="screen"><div class="error-state error-state--research"><div class="ambiguous-state"><div class="state-illustration state-illustration--blue"><span class="question-glyph">?</span></div><h2 class="state-title">这个词有好几个意思</h2><p class="state-copy">“Harness Engineering” 可能指：</p><div class="meaning-list"><span>AI agent 的环境、工具与反馈工程</span><span>线束与电气系统工程</span><span>同名软件或公司产品</span></div><button class="primary-action">带回首页补充说明</button></div></div></div><nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav></div></article>
+
+      <article class="prototype-card"><div class="frame-meta"><h3 class="frame-name">07 · 资料不足</h3><span class="error-code">SOURCES_INSUFFICIENT</span></div><div class="phone"><div class="status-bar"><span>9:41</span><span>5G　<span class="battery"></span></span></div><div class="mini-nav"><button class="mini-nav__back" aria-label="返回"><svg class="icon"><use href="#icon-back"/></svg></button><span class="mini-nav__title">资料不够</span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div><div class="screen"><div class="error-state error-state--research"><div><div class="state-illustration"><svg class="icon state-icon"><use href="#icon-search"/></svg></div><h2 class="state-title">还撑不起三关</h2><p class="state-copy">现在找到的可靠资料太少。<br />加上领域、版本或使用场景会更准。</p><div class="rewrite-example"><strong>试试这样写</strong><span>“2026 年 AI agent 的 Harness Engineering”</span></div><button class="primary-action">把主题写具体一点</button></div></div></div><nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav></div></article>
+
+      <article class="prototype-card"><div class="frame-meta"><h3 class="frame-name">08 · 研究中断</h3><span class="error-code">RESEARCH_AGENT_FAILED</span></div><div class="phone"><div class="status-bar"><span>9:41</span><span>5G　<span class="battery"></span></span></div><div class="mini-nav"><button class="mini-nav__back" aria-label="返回"><svg class="icon"><use href="#icon-back"/></svg></button><span class="mini-nav__title">研究中断</span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div><div class="screen"><div class="error-state error-state--research"><div><div class="state-illustration state-illustration--blue"><svg class="icon state-icon"><use href="#icon-alert"/></svg></div><h2 class="state-title">资料查到一半卡住了</h2><p class="state-copy">这次研究流程没有完成，<br />还没有生成或保存任何题目。</p><div class="preserved-input"><svg class="icon icon--small"><use href="#icon-search"/></svg><span>Harness Engineering</span></div><button class="primary-action"><svg class="icon"><use href="#icon-refresh"/></svg>重新查资料</button><button class="secondary-action action-gap">修改主题</button></div></div></div><nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav></div></article>
+
+      <article class="prototype-card"><div class="frame-meta"><h3 class="frame-name">09 · 事实校验失败</h3><span class="error-code">GROUNDING_VALIDATION_FAILED</span></div><div class="phone"><div class="status-bar"><span>9:41</span><span>5G　<span class="battery"></span></span></div><div class="mini-nav"><button class="mini-nav__back" aria-label="返回"><svg class="icon"><use href="#icon-back"/></svg></button><span class="mini-nav__title">题目没通过检查</span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div><div class="screen"><div class="error-state error-state--research"><div><div class="state-illustration state-illustration--red"><svg class="icon state-icon"><use href="#icon-check"/></svg></div><h2 class="state-title">题目和资料没对上</h2><p class="state-copy">为了不让错误知识混进关卡，<br />这次题目没有保存。</p><div class="preserved-input"><svg class="icon icon--small"><use href="#icon-search"/></svg><span>Harness Engineering</span></div><button class="primary-action"><svg class="icon"><use href="#icon-refresh"/></svg>重新生成</button><button class="secondary-action action-gap">修改主题</button></div></div></div><nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav></div></article>
+
+      <article class="prototype-card"><div class="frame-meta"><h3 class="frame-name">10 · 搜索服务故障</h3><span class="error-code">SEARCH_UNAVAILABLE</span></div><div class="phone"><div class="status-bar"><span>9:41</span><span>--　<span class="battery"></span></span></div><div class="mini-nav"><button class="mini-nav__back" aria-label="返回"><svg class="icon"><use href="#icon-back"/></svg></button><span class="mini-nav__title">搜索暂时不可用</span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div><div class="screen"><div class="error-state error-state--research"><div><div class="state-illustration state-illustration--blue"><svg class="icon state-icon"><use href="#icon-search"/></svg></div><h2 class="state-title">联网搜索暂时忙</h2><p class="state-copy">不是你的网络问题。<br />资料服务恢复后可以直接重试。</p><div class="preserved-input"><svg class="icon icon--small"><use href="#icon-search"/></svg><span>Harness Engineering</span></div><button class="primary-action"><svg class="icon"><use href="#icon-refresh"/></svg>重新搜索</button><button class="secondary-action action-gap">稍后再试</button></div></div></div><nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav></div></article>
+
+      <article class="prototype-card"><div class="frame-meta"><h3 class="frame-name">11 · 当前模式不读网页</h3><span class="error-code">URL_REQUIRES_RESEARCH</span></div><div class="phone"><div class="status-bar"><span>9:41</span><span>5G　<span class="battery"></span></span></div><div class="mini-nav"><button class="mini-nav__back" aria-label="返回"><svg class="icon"><use href="#icon-back"/></svg></button><span class="mini-nav__title">暂不支持网页</span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div><div class="screen"><div class="error-state error-state--research"><div><div class="state-illustration"><svg class="icon state-icon"><use href="#icon-link"/></svg></div><h2 class="state-title">当前模式还不能读网页</h2><p class="state-copy">网址已经替你保留。<br />现在可以改用知识关键词继续。</p><div class="preserved-input"><svg class="icon icon--small"><use href="#icon-link"/></svg><span>docs.langchain.com/oss/python/…</span></div><button class="primary-action">改成知识关键词</button><button class="secondary-action action-gap">返回首页</button></div></div></div><nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav></div></article>
+    </section>
+
+    <div class="section-heading"><h2>通关参考资料</h2></div>
+    <section class="frame-grid frame-grid--two" aria-label="参考资料条件展示">
+      <article class="prototype-card">
+        <div class="frame-meta"><h3 class="frame-name">12 · Grounded 通关</h3><span class="frame-note">有来源才展示</span></div>
+        <div class="phone"><div class="status-bar"><span>9:41</span><span>5G　<span class="battery"></span></span></div><div class="mini-nav"><button class="mini-nav__back" aria-label="返回"><svg class="icon"><use href="#icon-back"/></svg></button><span class="mini-nav__title">通关小报</span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div><div class="screen screen--result-scroll"><div class="completion-hero completion-hero--compact"><div class="stamp">最新资料已验明</div><h2 class="completion-title">三关，全拿下！</h2></div><div class="completion-sheet completion-sheet--compact"><p>✓ 环境给 Agent 划定运行边界</p><p>✓ 工具让 Agent 能采取行动</p><p>✓ 反馈回路负责观察与修正</p></div><section class="sources-panel" aria-labelledby="sources-title"><div class="sources-heading"><div><span class="sources-kicker">资料获取于 2026.08.28</span><h3 id="sources-title">本局参考资料</h3></div><span class="source-count">2 条</span></div><article class="source-item"><div class="source-item__top"><span class="source-method">搜索</span><strong>Harness Engineering for AI Agents</strong></div><span class="source-domain">docs.example.com</span><button class="copy-action"><svg class="icon icon--small"><use href="#icon-copy"/></svg>复制链接</button></article><article class="source-item"><div class="source-item__top"><span class="source-method source-method--extract">整页读取</span><strong>Building reliable feedback loops</strong></div><span class="source-domain">research.example.org</span><button class="copy-action"><svg class="icon icon--small"><use href="#icon-copy"/></svg>复制链接</button></article></section><button class="primary-action result-action">再学一个主题</button></div><nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav></div>
+      </article>
+
+      <article class="prototype-card">
+        <div class="frame-meta"><h3 class="frame-name">13 · Legacy / 历史通关</h3><span class="frame-note">不出现空来源容器</span></div>
+        <div class="phone"><div class="status-bar"><span>9:41</span><span>5G　<span class="battery"></span></span></div><div class="mini-nav"><button class="mini-nav__back" aria-label="返回"><svg class="icon"><use href="#icon-back"/></svg></button><span class="mini-nav__title">通关小报</span><span class="capsule"><span class="capsule__dots"><i></i><i></i><i></i></span><span class="capsule__divider"></span><span class="capsule__close"></span></span></div><div class="screen"><div class="completion-hero"><div class="stamp">Python 萌新毕业</div><h2 class="completion-title">三关，全拿下！</h2><p class="hero-subtitle">本局用时 2 分 18 秒</p></div><div class="completion-sheet"><p>✓ 变量是有名字的收纳盒</p><p>✓ if 是只认条件的门卫</p><p>✓ 缩进决定谁归 if 管</p></div><button class="primary-action">再学一个主题</button><button class="secondary-action action-gap">分享通关小报</button></div><nav class="tabbar" aria-label="主导航"><a class="tabbar__item" href="#" aria-current="page"><svg class="icon"><use href="#icon-book"/></svg><span>学习</span></a><a class="tabbar__item" href="#"><svg class="icon"><use href="#icon-user"/></svg><span>我的</span></a></nav></div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

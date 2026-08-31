@@ -60,11 +60,31 @@ class LearningSession(Base):
     hearts: Mapped[int] = mapped_column(Integer, default=3)
     current_level: Mapped[int] = mapped_column(Integer, default=0)
     summary: Mapped[list[str]] = mapped_column(JSON, default=list)
+    input_type: Mapped[str] = mapped_column(
+        String(20),
+        default="keyword",
+        server_default="keyword",
+    )
+    source_input: Mapped[str | None] = mapped_column(Text, nullable=True)
+    retrieved_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    sources: Mapped[list[dict]] = mapped_column(
+        JSON,
+        default=list,
+    )
+    generation_mode: Mapped[str] = mapped_column(String(20), default="legacy", server_default="legacy")
+    verification_notice: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    basic_fallback_id: Mapped[str | None] = mapped_column(String(32), nullable=True)
     started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     elapsed_seconds: Mapped[int | None] = mapped_column(Integer)
 
-    __table_args__ = (Index("ix_sessions_user_status", "user_id", "status"),)
+    __table_args__ = (
+        Index("ix_sessions_user_status", "user_id", "status"),
+        UniqueConstraint("basic_fallback_id", name="uq_sessions_basic_fallback_id"),
+    )
 
 
 class Level(Base):
@@ -85,6 +105,10 @@ class Level(Base):
     wrong_explanation: Mapped[str] = mapped_column(Text)
     praise: Mapped[str] = mapped_column(Text)
     takeaway: Mapped[str] = mapped_column(Text)
+    source_ids: Mapped[list[str]] = mapped_column(
+        JSON,
+        default=list,
+    )
 
     __table_args__ = (
         UniqueConstraint("session_id", "position", name="uq_level_session_position"),

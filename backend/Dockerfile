@@ -5,6 +5,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
 
 ARG PIP_INDEX_URL=https://mirrors.cloud.tencent.com/pypi/simple
+ARG INSTALL_RESEARCH=true
 
 WORKDIR /app
 
@@ -15,7 +16,11 @@ COPY app ./app
 COPY alembic.ini ./
 COPY alembic ./alembic
 
-RUN pip install --no-cache-dir --index-url "${PIP_INDEX_URL}" .
+RUN if [ "${INSTALL_RESEARCH}" = "true" ]; then \
+      pip install --no-cache-dir --index-url "${PIP_INDEX_URL}" '.[research]'; \
+    elif [ "${INSTALL_RESEARCH}" = "false" ]; then \
+      pip install --no-cache-dir --index-url "${PIP_INDEX_URL}" .; \
+    else exit 1; fi
 
 USER app
 

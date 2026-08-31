@@ -1,5 +1,6 @@
 import type {
   AnswerResponse,
+  BasicGameRequest,
   Game,
   LoginResponse,
   ShareResponse,
@@ -7,6 +8,7 @@ import type {
   UserSettings,
 } from '../types/api'
 import { request } from './request'
+import type { RequestCancellation } from './requestCancellation'
 
 export const api = {
   login: (code: string) =>
@@ -15,8 +17,13 @@ export const api = {
       data: { code },
       authenticated: false,
     }),
-  createGame: (topic: string) =>
-    request<Game>('/games', { method: 'POST', data: { topic } }),
+  createGame: (topic: string, cancellation?: RequestCancellation) =>
+    request<Game>('/games', { method: 'POST', data: { topic }, timeout: 90000, ...(cancellation ? { cancellation } : {}) }),
+  createBasicGame: (data: BasicGameRequest, cancellation?: RequestCancellation) =>
+    request<Game>('/games/basic', {
+      method: 'POST', data, timeout: 90000, retryAuthentication: false,
+      ...(cancellation ? { cancellation } : {}),
+    }),
   getGame: (gameId: string) => request<Game>(`/games/${gameId}`),
   answer: (gameId: string, option: number, attemptId: string) =>
     request<AnswerResponse>(`/games/${gameId}/answers`, {

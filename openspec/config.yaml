@@ -1,0 +1,37 @@
+schema: spec-driven
+
+context: |
+  Language: zh-CN
+  All artifacts must be written in zh-CN.
+  Keep OpenSpec structural headings and SHALL/MUST keywords in English.
+
+  Project: AI 万物学堂，一款面向微信小程序的 AI 互动游戏化学习产品。
+  Frontend: Taro 4.x, React 18, TypeScript, Zustand, and a Taro.request wrapper.
+  Backend: FastAPI on Python 3.11 with Pydantic v2 and MySQL.
+  AI orchestration: LangChain and the OpenAI SDK, with DeepSeek as a model provider
+  and structured output requirements.
+  Repository layout: frontend/ contains the Taro app, backend/ contains the API,
+  design/ contains frontend design artifacts, and dosc/ contains product documents.
+  Treat the repository-root AGENTS.md as authoritative project guidance.
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always include a "Non-goals" section
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing

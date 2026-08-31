@@ -1,7 +1,141 @@
+.basic-result-copy { display: block; margin: 14px 0 24px; color: var(--muted); font-size: 14px; line-height: 1.65; white-space: pre-line; }
+
 .game-screen .screen {
   overflow-y: auto;
 }
 
 .revive-button {
   margin-top: 14px;
+}
+
+.completion-hero--compact .stamp {
+  margin-top: 2px;
+  margin-bottom: 7px;
+}
+
+.completion-sheet--compact {
+  margin: 10px 0;
+  padding: 10px 13px;
+}
+
+.completion-sheet--compact .completion-sheet__line {
+  min-height: 25px;
+  font-size: 12px;
+  line-height: 25px;
+}
+
+.sources-panel {
+  padding: 12px;
+  border: 2px solid var(--ink);
+  border-radius: 15px 11px 17px 12px;
+  background: var(--paper);
+  box-shadow: 4px 5px 0 var(--blue);
+}
+
+.sources-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+
+.sources-title {
+  display: block;
+  margin-top: 2px;
+  font-family: "FZCuYuan-M03S", "PingFang SC", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.sources-kicker {
+  display: block;
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 0.04em;
+}
+
+.source-count {
+  color: var(--coral-deep);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.source-item {
+  position: relative;
+  min-height: 52px;
+  padding: 9px 92px 9px 0;
+  border-top: 1px dashed var(--line);
+}
+
+.source-item__top {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.source-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.source-method {
+  flex: 0 0 auto;
+  padding: 2px 5px;
+  color: var(--coral-deep);
+  border-radius: 999px;
+  background: var(--cream);
+  font-size: 9px;
+}
+
+.source-method--extract {
+  color: #287687;
+  background: var(--blue-soft);
+}
+
+.source-domain {
+  display: block;
+  max-width: 190px;
+  margin-top: 5px;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copy-action {
+  position: absolute;
+  right: 0;
+  bottom: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-sizing: border-box;
+  width: 84px;
+  min-height: 44px;
+  margin: 0;
+  padding: 5px;
+  color: var(--blue);
+  border: 1px solid var(--blue);
+  border-radius: 9px;
+  background: #fff;
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+.copy-action image {
+  width: 15px;
+  height: 15px;
+}
+
+.result-action {
+  margin-top: 13px;
 }

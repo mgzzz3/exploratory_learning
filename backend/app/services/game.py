@@ -1,15 +1,20 @@
 from __future__ import annotations
 
+import asyncio
 import secrets
 from datetime import datetime, timedelta, timezone
 from uuid import UUID
 
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.clients.ai import ContentGenerationError, ContentGenerator
+from app.clients.ai import ContentGenerationError
 from app.clients.wechat import WechatClient, WechatClientError
 from app.core.errors import AppError
+from app.core.observability import stage
+from app.api.request_lifecycle import require_connected_task
+from app.services.generation_errors import public_generation_error
 from app.db.models import (
     AnswerAttempt,
     AssistToken,
@@ -28,6 +33,8 @@ from app.schemas.game import (
     OptionOut,
     ShareResponse,
 )
+from app.schemas.learning_input import classify_learning_input
+from app.services.generation_strategy import QuestionGenerationStrategy, GenerationResult
 
 
 OPTION_KEYS = ("A", "B", "C")
@@ -94,6 +101,13 @@ async def game_to_out(db: AsyncSession, game: LearningSession) -> GameOut:
         level=level_out,
         summary=game.summary,
         elapsed_seconds=game.elapsed_seconds,
+        input_type=game.input_type,
+        retrieved_at=(
+            aware_utc(game.retrieved_at) if game.retrieved_at is not None else None
+        ),
+        sources=game.sources,
+        generation_mode=game.generation_mode,
+        verification_notice=game.verification_notice,
     )
 
 
@@ -103,16 +117,21 @@ async def create_game(
     user: User,
     topic: str,
     wechat: WechatClient,
-    generator: ContentGenerator,
+    strategy: QuestionGenerationStrategy,
 ) -> GameOut:
+    descriptor = classify_learning_input(topic)
+    safety_failure = None
     try:
-        allowed = await wechat.check_message(user.openid, topic)
-    except WechatClientError as exc:
-        raise AppError(
+        with stage("safety"):
+            allowed = await wechat.check_message(user.openid, descriptor.normalized_input)
+    except WechatClientError:
+        safety_failure = AppError(
             status_code=503,
             code="WECHAT_UNAVAILABLE",
             message="内容安全检查暂时不可用，请稍后再试",
-        ) from exc
+        )
+    if safety_failure:
+        raise safety_failure from None
     if not allowed:
         raise AppError(
             status_code=422,
@@ -120,31 +139,83 @@ async def create_game(
             message="这个主题暂时不能生成，换一个试试吧",
         )
     try:
-        generated = await generator.generate(topic)
-    except ContentGenerationError as exc:
-        raise AppError(
-            status_code=502,
-            code="AI_GENERATION_FAILED",
-            message="这次没搭好关卡，请重新生成",
-            details={"topic": topic},
-        ) from exc
+        generated = await strategy.generate(descriptor)
+    except asyncio.CancelledError:
+        await db.rollback()
+        raise
+    except Exception as exc:
+        failure = public_generation_error(exc)
+        if failure is None:
+            raise
+    else:
+        failure = None
+    if failure is not None:
+        raise failure from None
+    return await persist_generated_game(db, user_id=user.id, generated=generated)
+
+
+async def find_basic_game(db: AsyncSession, *, user_id: str, permit_id: str) -> GameOut | None:
+    row = await db.scalar(select(LearningSession).where(
+        LearningSession.basic_fallback_id == permit_id,
+        LearningSession.user_id == user_id,
+        LearningSession.generation_mode == "basic",
+    ))
+    return await game_to_out(db, row) if row is not None else None
+
+
+async def persist_generated_game(db: AsyncSession, *, user_id: str, generated: GenerationResult) -> GameOut:
+    with stage("persistence"):
+        return await _persist_generated_game(db, user_id=user_id, generated=generated)
+
+
+async def _persist_generated_game(db: AsyncSession, *, user_id: str, generated: GenerationResult) -> GameOut:
+    require_connected_task()
     game = LearningSession(
-        user_id=user.id,
-        topic=topic,
-        title=generated.title,
+        user_id=user_id,
+        topic=generated.display_topic,
+        title=generated.game.title,
         status="active",
         hearts=3,
         current_level=0,
-        summary=generated.summary,
+        summary=generated.game.summary,
+        input_type=generated.input_type,
+        source_input=generated.source_input,
+        retrieved_at=generated.retrieved_at,
+        sources=[source.model_dump(mode="json") for source in generated.sources],
+        generation_mode=generated.generation_mode,
+        verification_notice=generated.verification_notice,
+        basic_fallback_id=generated.basic_fallback_id,
     )
-    db.add(game)
-    await db.flush()
-    _add_levels(db, game.id, generated)
-    await db.commit()
+    try:
+        db.add(game)
+        await db.flush()
+        _add_levels(
+            db,
+            game.id,
+            generated.game,
+            generated.level_source_ids,
+        )
+        require_connected_task()
+        await db.commit()
+    except IntegrityError:
+        await db.rollback()
+        if generated.basic_fallback_id is not None:
+            existing = await find_basic_game(db, user_id=user_id, permit_id=generated.basic_fallback_id)
+            if existing is not None:
+                return existing
+        raise
+    except BaseException:
+        await db.rollback()
+        raise
     return await game_to_out(db, game)
 
 
-def _add_levels(db: AsyncSession, session_id: str, generated: GeneratedGame) -> None:
+def _add_levels(
+    db: AsyncSession,
+    session_id: str,
+    generated: GeneratedGame,
+    level_source_ids: list[list[str]],
+) -> None:
     for position, level in enumerate(generated.levels):
         db.add(
             Level(
@@ -159,6 +230,7 @@ def _add_levels(db: AsyncSession, session_id: str, generated: GeneratedGame) -> 
                 wrong_explanation=level.wrong_explanation,
                 praise=level.praise,
                 takeaway=level.takeaway,
+                source_ids=level_source_ids[position],
             )
         )
 

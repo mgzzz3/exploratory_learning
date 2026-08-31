@@ -12,6 +12,7 @@
   "scripts": {
     "prepare": "husky",
     "new": "taro new",
+    "test": "vitest run --threads false",
     "lint": "eslint src config --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
     "build:weapp": "taro build --type weapp --mode production",
@@ -86,6 +87,7 @@
     "stylelint-config-standard": "^38.0.0",
     "terser": "^5.30.4",
     "typescript": "^5.4.5",
-    "vite": "^4.2.0"
+    "vite": "^4.2.0",
+    "vitest": "0.34.6"
   }
 }

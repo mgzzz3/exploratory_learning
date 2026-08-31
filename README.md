@@ -1,6 +1,8 @@
 # AI 万物学堂 MVP
 
-一个把任意学习主题转成三关小游戏的微信小程序。前端使用 Taro 4、React 18、TypeScript 和 Zustand；后端使用 FastAPI、Pydantic v2、SQLAlchemy 2、MySQL 8、LangChain Prompt 与 OpenAI SDK，模型服务为 DeepSeek。
+一个把学习主题转成三关小游戏的微信小程序。前端使用 Taro 4、React 18、TypeScript 和 Zustand；后端使用 FastAPI、Pydantic v2、SQLAlchemy 2、MySQL 8、LangChain Agent 与 OpenAI SDK，模型服务为 DeepSeek。
+
+当前工作区包含 Tavily 联网生成与手动基础知识兜底的开发版本，尚未完成全部真实主题和微信端验收，也未发布到生产。验收边界见 [TDD 实施记录](dosc/联网生成TDD实施记录.md)。
 
 ## 已实现
 
@@ -23,12 +25,14 @@ cd backend
 docker compose -f compose.development.yml up -d --wait
 docker compose -f compose.test.yml up -d --wait
 python3.11 -m venv .venv
-.venv/bin/pip install -e '.[test]'
+.venv/bin/pip install -e '.[research,test]'
 .venv/bin/alembic upgrade head
 .venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 后端始终从仓库根目录的 `.env` 读取配置，因此从仓库根目录或 `backend` 目录启动均可。本地开发库为 `127.0.0.1:3306/ai_school_dev`，测试库为 `127.0.0.1:3307/ai_school_test`，二者和线上库完全隔离。DeepSeek 密钥支持 `DEEPSEEK_API` 和 `DEEPSEEK_API_KEY` 两种变量名；密钥只由后端读取，不会打包进小程序。
+
+首次才复制环境示例，不要覆盖已配置的 `.env`。`QUESTION_GENERATION_MODE=grounded` 为默认联网模式，需要后端配置 `TAVILY_API_KEY` 与 DeepSeek key；`legacy` 为独立的旧关键词生成策略，可只安装 `.[test]`，不导入研究依赖、不调用 Tavily、不接受网址或新的 basic 许可。配置与回退细节见 [联网生成调试与回滚](dosc/联网生成调试与回滚.md)。
 
 开发环境会分别判断服务凭证：微信凭证兼容 `WX_APP_ID`/`WX_APP_SECRET` 和 `WECHAT_APP_ID`/`WECHAT_APP_SECRET` 两组变量名；没有微信凭证时使用本地微信登录，但只要配置了 DeepSeek 密钥，AI 内容生成就会调用真实 DeepSeek。`USE_MOCK_SERVICES=true` 会强制两者都使用确定性的本地服务。生产环境必须设置真实凭证并保持 `USE_MOCK_SERVICES=false`。
 
@@ -56,6 +60,7 @@ TEST_MYSQL_DATABASE_URL='mysql+asyncmy://root:test-password@127.0.0.1:3307/ai_sc
   .venv/bin/pytest
 
 cd ../frontend
+pnpm test
 pnpm typecheck
 pnpm lint
 pnpm build:weapp
@@ -71,8 +76,10 @@ FastAPI 文档在后端启动后位于 `http://127.0.0.1:8000/docs`。MySQL 集�
 ```bash
 cd backend
 cp .env.production.example .env.production
-# 填入随机数据库密码、JWT 密钥、微信凭证和 DeepSeek 密钥
+# 填入随机数据库密码、JWT 密钥、微信凭证、DeepSeek 与 grounded 模式的 Tavily 密钥
 docker compose --env-file .env.production -f compose.production.yml up -d --build
 ```
 
 服务器防火墙只需向公网开放 TCP 22、80、443 和 UDP 443；不要开放 MySQL 3306。域名的 `api` A 记录必须指向服务器公网 IP，HTTPS 才能自动签发。
+
+以上为部署说明，不代表本次已执行发布。默认 Docker 镜像安装 research extra；显式构建 `--build-arg INSTALL_RESEARCH=false` 时只能运行 legacy 模式。生产使用独立的 `backend/.env.production`，不要用本地 `.env` 覆盖生产配置，也不要因切换生成模式回退数据库迁移或移除 basic 的未核验标识。

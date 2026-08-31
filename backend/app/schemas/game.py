@@ -8,12 +8,27 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
+    StrictBool,
     field_validator,
     model_validator,
 )
 
+from app.schemas.learning_input import InputType, classify_learning_input
+
 
 Tier = Literal["novice", "advanced", "boss"]
+GenerationMode = Literal["grounded", "legacy", "basic"]
+AcquisitionMethod = Literal["search", "extract"]
+
+
+class SourceReferenceOut(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    id: str = Field(pattern=r"^src_[0-9a-f]{12}$")
+    title: str = Field(min_length=1, max_length=500)
+    url: str = Field(min_length=8, max_length=2048)
+    domain: str = Field(min_length=1, max_length=253)
+    acquisition_method: AcquisitionMethod
 
 
 class GeneratedLevel(BaseModel):
@@ -67,14 +82,34 @@ class GeneratedGame(BaseModel):
 class GameCreateRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    topic: str = Field(min_length=1, max_length=80)
+    topic: str = Field(min_length=1, max_length=2048)
 
     @field_validator("topic")
     @classmethod
     def clean_topic(cls, value: str) -> str:
-        value = " ".join(value.split())
-        if not value:
-            raise ValueError("学习主题不能为空")
+        return classify_learning_input(value).normalized_input
+
+
+class BasicGameCreateRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+    topic: str = Field(min_length=1, max_length=80)
+    fallback_token: str = Field(min_length=1, max_length=4096, repr=False)
+    acknowledge_unverified: StrictBool
+
+    @field_validator("topic")
+    @classmethod
+    def keyword_only(cls, value: str) -> str:
+        descriptor = classify_learning_input(value)
+        if descriptor.input_type != "keyword" or "http://" in value.lower() or "https://" in value.lower():
+            raise ValueError("基础知识模式不支持网址")
+        return descriptor.normalized_input
+
+    @field_validator("acknowledge_unverified")
+    @classmethod
+    def requires_consent(cls, value: bool) -> bool:
+        if value is not True:
+            raise ValueError("需要明确同意未经联网核验")
         return value
 
 
@@ -104,6 +139,11 @@ class GameOut(BaseModel):
     level: LevelOut | None
     summary: list[str]
     elapsed_seconds: int | None
+    input_type: InputType
+    retrieved_at: datetime | None
+    sources: list[SourceReferenceOut]
+    generation_mode: GenerationMode = "legacy"
+    verification_notice: str | None = None
 
 
 class AnswerRequest(BaseModel):

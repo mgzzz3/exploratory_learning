@@ -37,9 +37,12 @@ def error_payload(
 def install_error_handlers(app: FastAPI) -> None:
     @app.exception_handler(AppError)
     async def handle_app_error(_: Request, exc: AppError) -> JSONResponse:
+        from app.core.observability import note_failure, request_id
+        note_failure(exc.code, (exc.details or {}).get("reason"))
+        details = {**(exc.details or {}), "request_id": request_id()}
         return JSONResponse(
             status_code=exc.status_code,
-            content=error_payload(exc.code, exc.message, exc.details),
+            content=error_payload(exc.code, exc.message, details),
         )
 
     @app.exception_handler(RequestValidationError)
@@ -47,11 +50,15 @@ def install_error_handlers(app: FastAPI) -> None:
         _: Request,
         exc: RequestValidationError,
     ) -> JSONResponse:
+        from app.core.observability import note_failure, request_id
+        note_failure("VALIDATION_ERROR")
+        known_fields = {"body", "query", "path", "topic", "fallback_token", "acknowledge_unverified", "code", "option", "attempt_id", "game_id", "event_id", "completed", "sound_enabled", "vibration_enabled"}
         details = {
+            "request_id": request_id(),
             "fields": [
                 {
-                    "path": ".".join(str(part) for part in error["loc"]),
-                    "message": error["msg"],
+                    "path": ".".join(str(part) if part in known_fields or type(part) is int else "extra" for part in error["loc"]),
+                    "message": "字段值或格式不符合要求",
                 }
                 for error in exc.errors()
             ]

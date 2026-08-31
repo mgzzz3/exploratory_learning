@@ -23,6 +23,7 @@ def anyio_backend() -> str:
 def settings() -> Settings:
     return Settings(
         environment="test",
+        question_generation_mode="legacy",
         database_url="sqlite+aiosqlite://",
         jwt_secret="test-secret-with-at-least-32-characters",
         jwt_ttl_minutes=60,

@@ -1,5 +1,22 @@
 export type Tier = 'novice' | 'advanced' | 'boss'
 export type GameStatus = 'active' | 'paused' | 'completed'
+export type LearningInputType = 'keyword' | 'url'
+export type AcquisitionMethod = 'search' | 'extract'
+export type GenerationMode = 'grounded' | 'legacy' | 'basic'
+
+export interface BasicGameRequest {
+  topic: string
+  fallback_token: string
+  acknowledge_unverified: true
+}
+
+export interface BasicFallback {
+  available: true
+  token: string
+  expires_at: string
+  mode: 'basic'
+  notice: '未经联网核验'
+}
 
 export interface AuthUser {
   id: string
@@ -27,6 +44,14 @@ export interface GameLevel {
   options: GameOption[]
 }
 
+export interface SourceReference {
+  id: string
+  title: string
+  url: string
+  domain: string
+  acquisition_method: AcquisitionMethod
+}
+
 export interface Game {
   id: string
   topic: string
@@ -38,6 +63,11 @@ export interface Game {
   level: GameLevel | null
   summary: string[]
   elapsed_seconds: number | null
+  input_type: LearningInputType
+  retrieved_at: string | null
+  sources: SourceReference[]
+  generation_mode?: GenerationMode
+  verification_notice?: string | null
 }
 
 export type AnswerResult = 'correct' | 'wrong' | 'paused' | 'completed'

@@ -113,7 +113,7 @@ async def test_content_safety_outage_does_not_bypass_check(
 
 
 @pytest.mark.anyio
-async def test_generation_failure_preserves_topic_in_error_details(
+async def test_generation_failure_has_safe_details_without_echoing_topic(
     client: AsyncClient,
     generator: FakeContentGenerator,
 ) -> None:
@@ -127,11 +127,12 @@ async def test_generation_failure_preserves_topic_in_error_details(
     )
 
     assert response.status_code == 502
-    assert response.json()["error"] == {
-        "code": "AI_GENERATION_FAILED",
-        "message": "这次没搭好关卡，请重新生成",
-        "details": {"topic": "Python 基础"},
-    }
+    error = response.json()["error"]
+    assert error["code"] == "AI_GENERATION_FAILED"
+    assert error["message"] == "这次没搭好关卡，请重新生成"
+    assert error["details"]["reason"] == "GENERATION_UNAVAILABLE"
+    assert len(error["details"]["request_id"]) == 32
+    assert "topic" not in error["details"]
 
 
 @pytest.mark.anyio
