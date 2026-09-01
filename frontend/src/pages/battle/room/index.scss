@@ -1,0 +1,9 @@
+.battle-room {
+  .battle-ready-list { margin-top: 12px; }
+  &__spinner { display: block; margin: 18px auto; }
+}
+
+.battle-room--countdown {
+  .countdown-stage { display: grid; place-items: center; min-height: 55vh; gap: 12px; }
+  .countdown-number { font-size: 72px; font-weight: 800; color: var(--coral-deep, #c0392b); }
+}

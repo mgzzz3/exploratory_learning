@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncEngine
 
-from app.api.routes import assists, auth, games, health, me
+from app.api.routes import assists, auth, battles, games, health, me
 from app.clients.ai import ContentGenerator, DeepSeekContentGenerator, LocalContentGenerator
 from app.clients.wechat import LocalWechatClient, WechatApiClient, WechatClient
 from app.core.config import Settings, get_settings
@@ -144,7 +144,14 @@ def create_app(
         allow_headers=["*"],
     )
     install_error_handlers(app)
-    for router in (health.router, auth.router, games.router, assists.router, me.router):
+    for router in (
+        health.router,
+        auth.router,
+        games.router,
+        battles.router,
+        assists.router,
+        me.router,
+    ):
         app.include_router(router, prefix=settings.api_prefix)
     return app
 

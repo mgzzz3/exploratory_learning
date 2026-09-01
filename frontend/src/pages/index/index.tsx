@@ -263,6 +263,12 @@ export default function Index() {
       <PrimaryButton onClick={generate}>
         {isUrl ? '读取网页 · 生成三关' : hasTopic ? '生成我的闯关' : '开一局 · 3 关学明白'}
       </PrimaryButton>
+      <SecondaryButton
+        className='action-gap'
+        onClick={() => Taro.navigateTo({ url: '/pages/battle/create/index' }).catch(() => undefined)}
+      >
+        ⚔ 约好友 · 对战一局
+      </SecondaryButton>
       <Text className='micro-copy'>
         {isUrl
           ? '原网址会保留，失败后不用重新粘贴'

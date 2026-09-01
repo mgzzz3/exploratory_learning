@@ -1,0 +1,4 @@
+.battle-play {
+  .battle-clock { color: var(--coral); font-size: 13px; font-weight: 700; white-space: nowrap; }
+  &__hint { display: block; margin-top: 12px; text-align: center; }
+}

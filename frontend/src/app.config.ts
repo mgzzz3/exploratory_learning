@@ -2,6 +2,11 @@ export default defineAppConfig({
   pages: [
     'pages/index/index',
     'pages/game/index',
+    'pages/battle/create/index',
+    'pages/battle/join/index',
+    'pages/battle/room/index',
+    'pages/battle/play/index',
+    'pages/battle/result/index',
     'pages/profile/index',
     'pages/share/index',
     'pages/assist/index'
