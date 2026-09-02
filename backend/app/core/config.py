@@ -22,6 +22,8 @@ class Settings(BaseSettings):
     app_name: str = "AI 万物学堂 API"
     environment: Literal["development", "test", "production"] = "development"
     question_generation_mode: Literal["grounded", "legacy"] = "grounded"
+    # Selector for the pluggable AI provider registry in app.clients.ai.
+    ai_provider: str = "deepseek"
     api_prefix: str = "/api/v1"
     database_url: str = "mysql+asyncmy://root:password@127.0.0.1:3306/ai_school?charset=utf8mb4"
     jwt_secret: str = Field(
@@ -110,8 +112,10 @@ class Settings(BaseSettings):
             and not self.tavily_api_key.get_secret_value()
         ):
             missing.append("TAVILY_API_KEY")
-        if not self.deepseek_api_key.get_secret_value():
-            missing.append("DEEPSEEK_API/DEEPSEEK_API_KEY")
+        # Provider-specific credentials are declared by each AI provider spec.
+        from app.clients.ai.registry import ai_provider_credentials_missing
+
+        missing.extend(ai_provider_credentials_missing(self))
         if missing:
             raise ValueError(f"生产生成服务缺少配置：{', '.join(missing)}")
         return self
@@ -134,7 +138,9 @@ class Settings(BaseSettings):
             return True
         if self.environment == "production":
             return False
-        return not self.deepseek_api_key.get_secret_value()
+        from app.clients.ai.registry import ai_provider_credentials_missing
+
+        return bool(ai_provider_credentials_missing(self))
 
     @property
     def should_use_mock_research(self) -> bool:
@@ -144,9 +150,11 @@ class Settings(BaseSettings):
             return True
         if self.environment == "production":
             return False
-        return not (
-            self.deepseek_api_key.get_secret_value()
-            and self.tavily_api_key.get_secret_value()
+        from app.clients.ai.registry import ai_provider_credentials_missing
+
+        return bool(
+            ai_provider_credentials_missing(self)
+            or not self.tavily_api_key.get_secret_value()
         )
 
 

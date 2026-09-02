@@ -30,6 +30,7 @@ export default function ProfilePage() {
       const next = {
         sound_enabled: value.sound_enabled,
         vibration_enabled: value.vibration_enabled,
+        web_search_enabled: value.web_search_enabled,
       }
       setSettings(next)
       setStoredSettings(next)
@@ -69,6 +70,10 @@ export default function ProfilePage() {
       </View>
       <Text className='setting-title'>学习设置</Text>
       <View className='settings'>
+        <Button className='setting-row' onClick={() => toggle('web_search_enabled')}>
+          <View className='setting-row__main'><Text className='setting-row__icon'>◎</Text><Text>联网搜索出题</Text></View>
+          <View className={`switch ${settings.web_search_enabled ? 'switch--on' : ''}`} />
+        </Button>
         <Button className='setting-row' onClick={() => toggle('sound_enabled')}>
           <View className='setting-row__main'><Text className='setting-row__icon'>♪</Text><Text>学习音效</Text></View>
           <View className={`switch ${settings.sound_enabled ? 'switch--on' : ''}`} />

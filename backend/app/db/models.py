@@ -13,6 +13,7 @@ from sqlalchemy import (
     String,
     Text,
     UniqueConstraint,
+    true,
 )
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -38,6 +39,11 @@ class User(Base):
     learned_points: Mapped[int] = mapped_column(Integer, default=0)
     sound_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     vibration_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+    web_search_enabled: Mapped[bool] = mapped_column(
+        Boolean,
+        default=True,
+        server_default=true(),
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

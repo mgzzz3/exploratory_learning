@@ -155,11 +155,13 @@ export interface UserProfile {
   learned_points: number
   sound_enabled: boolean
   vibration_enabled: boolean
+  web_search_enabled: boolean
 }
 
 export interface UserSettings {
   sound_enabled: boolean
   vibration_enabled: boolean
+  web_search_enabled: boolean
 }
 
 export interface ApiErrorBody {

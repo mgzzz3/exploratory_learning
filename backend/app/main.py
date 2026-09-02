@@ -5,7 +5,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncEngine
 
 from app.api.routes import assists, auth, battles, games, health, me
-from app.clients.ai import ContentGenerator, DeepSeekContentGenerator, LocalContentGenerator
+from app.clients.ai import (
+    ContentGenerator,
+    build_content_generator,
+    build_research_model,
+)
 from app.clients.wechat import LocalWechatClient, WechatApiClient, WechatClient
 from app.core.config import Settings, get_settings
 from app.core.generation_budget import GenerationBudget
@@ -14,17 +18,11 @@ from app.core.observability import GenerationDiagnosticsMiddleware, GenerationMe
 from app.db.session import build_engine, build_session_factory
 from app.services.generation_strategy import (
     GroundedGenerationStrategy,
+    LegacyGenerationStrategy,
     LocalResearcher,
     QuestionGenerationStrategy,
     build_generation_strategy,
 )
-
-
-def build_research_chat_model(settings: Settings):
-    """Delay optional research imports until grounded mode is selected."""
-    from app.clients.research import build_research_chat_model as build_model
-
-    return build_model(settings)
 
 
 def build_grounded_generation_strategy(
@@ -100,19 +98,10 @@ def create_app(
             )
         )
     if content_generator is None:
-        content_generator = (
-            LocalContentGenerator()
-            if settings.should_use_mock_content_generator
-            else DeepSeekContentGenerator(
-                api_key=settings.deepseek_api_key.get_secret_value(),
-                base_url=settings.deepseek_base_url,
-                model=settings.deepseek_model,
-                max_retries=settings.ai_max_retries,
-            )
-        )
+        content_generator = build_content_generator(settings)
 
     research_chat_model = (
-        build_research_chat_model(settings) if settings.research_enabled else None
+        build_research_model(settings) if settings.research_enabled else None
     )
     if generation_strategy is None:
         generation_strategy = build_generation_strategy(
@@ -136,6 +125,8 @@ def create_app(
     app.state.content_generator = content_generator
     app.state.research_chat_model = research_chat_model
     app.state.generation_strategy = generation_strategy
+    # Direct AI generation without web research; selected per user preference.
+    app.state.direct_generation_strategy = LegacyGenerationStrategy(content_generator)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,

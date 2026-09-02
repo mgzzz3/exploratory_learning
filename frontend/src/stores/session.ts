@@ -33,7 +33,7 @@ const sessionStore = createStore<SessionStore>()(
       user: null,
       currentGameId: null,
       lastTopic: '',
-      settings: { sound_enabled: true, vibration_enabled: true },
+      settings: { sound_enabled: true, vibration_enabled: true, web_search_enabled: true },
       share: null,
       setSession: (accessToken, user) => set({ accessToken, user }),
       clearSession: () => set({ accessToken: null, user: null }),

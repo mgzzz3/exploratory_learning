@@ -40,6 +40,7 @@ const STATE_ICONS: Record<GenerationErrorPresentation['symbol'], string> = {
 export default function Index() {
   const setLastTopic = useSessionStore((state) => state.setLastTopic)
   const setCurrentGame = useSessionStore((state) => state.setCurrentGame)
+  const webSearchEnabled = useSessionStore((state) => state.settings.web_search_enabled)
   const [flow] = useState(() => new CreationFlow(
     { ...api, ensureSession: ensureLogin },
     useSessionStore.getState().lastTopic,
@@ -138,10 +139,10 @@ export default function Index() {
           <View>
             <View className='loading-doodle' aria-hidden><View className='loading-book' /><View className='loading-pencil' /></View>
             <Text className='loading-copy-title'>
-              {basic ? '正在生成基础知识题' : '正在联网准备题目'}
+              {basic ? '正在生成基础知识题' : webSearchEnabled ? '正在联网准备题目' : '正在准备题目'}
             </Text>
             <Text className='loading-copy-subtitle' aria-live='polite'>
-              {basic ? '本次不会进行联网核验' : inputType === 'url' ? '将读取页面、生成题目并校验事实' : '将查询资料、生成题目并校验事实'}
+              {basic ? '本次不会进行联网核验' : !webSearchEnabled ? '将直接由 AI 出题，本次不联网搜索' : inputType === 'url' ? '将读取页面、生成题目并校验事实' : '将查询资料、生成题目并校验事实'}
             </Text>
           </View>
         </View>

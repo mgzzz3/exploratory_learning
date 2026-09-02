@@ -11,7 +11,7 @@
 - AI 严格生成新手、进阶、Boss 三关，每关一道三选一题
 - 答对晋级；答错用大白话解释并扣一颗心；归零暂停
 - 完整观看激励视频或另一位好友使用单次助力卡后恢复三颗心
-- 通关小报、学习统计、音效与振动设置
+- 通关小报、学习统计、音效、振动与联网搜索开关设置
 - 内容拦截、AI 生成失败、网络中断和幂等重试状态
 - 设计稿中的 18 个核心、反馈、恢复和异常状态
 
@@ -35,6 +35,8 @@ python3.11 -m venv .venv
 首次才复制环境示例，不要覆盖已配置的 `.env`。`QUESTION_GENERATION_MODE=grounded` 为默认联网模式，需要后端配置 `TAVILY_API_KEY` 与 DeepSeek key；`legacy` 为独立的旧关键词生成策略，可只安装 `.[test]`，不导入研究依赖、不调用 Tavily、不接受网址或新的 basic 许可。配置与回退细节见 [联网生成调试与回滚](dosc/联网生成调试与回滚.md)。
 
 开发环境会分别判断服务凭证：微信凭证兼容 `WX_APP_ID`/`WX_APP_SECRET` 和 `WECHAT_APP_ID`/`WECHAT_APP_SECRET` 两组变量名；没有微信凭证时使用本地微信登录，但只要配置了 DeepSeek 密钥，AI 内容生成就会调用真实 DeepSeek。`USE_MOCK_SERVICES=true` 会强制两者都使用确定性的本地服务。生产环境必须设置真实凭证并保持 `USE_MOCK_SERVICES=false`。
+
+AI 提供商通过 `AI_PROVIDER` 选择，默认 `deepseek`。提供商在 `backend/app/clients/ai/` 以注册表方式接入：新增一个提供商模块并调用 `register_ai_provider` 即可，不需要改动既有提供商和服务层。用户也可以在小程序“我的-学习设置”里关闭联网搜索，关闭后出题直接使用 AI、不再联网检索（网页地址输入仍要求联网）。
 
 ### 2. 小程序前端
 

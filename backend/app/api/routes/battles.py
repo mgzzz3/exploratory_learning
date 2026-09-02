@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import APIRouter, BackgroundTasks, Depends, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db
+from app.api.deps import get_current_user, get_db, get_generation_strategy
 from app.db.models import User
 from app.schemas.battle import (
     BattleAnswerRequest,
@@ -22,6 +22,7 @@ from app.services.battle import (
     run_battle_generation,
     set_battle_ready,
 )
+from app.services.generation_strategy import QuestionGenerationStrategy
 
 
 router = APIRouter(prefix="/battles", tags=["battles"])
@@ -34,6 +35,7 @@ async def create(
     background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    strategy: QuestionGenerationStrategy = Depends(get_generation_strategy),
 ) -> BattleRoomOut:
     room, descriptor = await create_battle(
         db,
@@ -46,7 +48,7 @@ async def create(
         request.app.state.session_factory,
         room_id=room.id,
         descriptor=descriptor,
-        strategy=request.app.state.generation_strategy,
+        strategy=strategy,
     )
     return await battle_room_to_out(db, room=room, user=user)
 

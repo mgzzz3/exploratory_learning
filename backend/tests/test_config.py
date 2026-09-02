@@ -152,7 +152,7 @@ def test_legacy_app_does_not_run_research_capability_gate(monkeypatch) -> None:
         raise AssertionError("legacy must not initialize research")
 
     monkeypatch.setattr(
-        "app.main.build_research_chat_model",
+        "app.main.build_research_model",
         unexpected_research_build,
     )
     settings = Settings(

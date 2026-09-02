@@ -26,4 +26,5 @@ async def update_settings(
     return UserSettings(
         sound_enabled=user.sound_enabled,
         vibration_enabled=user.vibration_enabled,
+        web_search_enabled=user.web_search_enabled,
     )

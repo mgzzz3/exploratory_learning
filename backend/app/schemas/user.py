@@ -10,6 +10,7 @@ class UserProfile(BaseModel):
     learned_points: int
     sound_enabled: bool
     vibration_enabled: bool
+    web_search_enabled: bool
 
 
 class UserSettingsUpdate(BaseModel):
@@ -17,8 +18,10 @@ class UserSettingsUpdate(BaseModel):
 
     sound_enabled: bool | None = None
     vibration_enabled: bool | None = None
+    web_search_enabled: bool | None = None
 
 
 class UserSettings(BaseModel):
     sound_enabled: bool
     vibration_enabled: bool
+    web_search_enabled: bool

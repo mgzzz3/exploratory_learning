@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.errors import AppError
 from app.core.security import InvalidTokenError, decode_access_token
 from app.db.models import User
+from app.services.generation_strategy import QuestionGenerationStrategy
 
 
 async def get_db(request: Request) -> AsyncIterator[AsyncSession]:
@@ -44,3 +45,13 @@ async def get_current_user(
             message="登录状态已失效，请重新登录",
         )
     return user
+
+
+async def get_generation_strategy(
+    request: Request,
+    user: User = Depends(get_current_user),
+) -> QuestionGenerationStrategy:
+    """Web research stays opt-out per user: off means direct AI generation."""
+    if user.web_search_enabled:
+        return request.app.state.generation_strategy
+    return request.app.state.direct_generation_strategy

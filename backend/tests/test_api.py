@@ -376,9 +376,18 @@ async def test_profile_settings_can_be_updated(client: AsyncClient) -> None:
     response = await client.patch(
         "/api/v1/me/settings",
         headers=headers,
-        json={"sound_enabled": False, "vibration_enabled": True},
+        json={
+            "sound_enabled": False,
+            "vibration_enabled": True,
+            "web_search_enabled": False,
+        },
     )
 
     assert response.status_code == 200
     assert response.json()["sound_enabled"] is False
     assert response.json()["vibration_enabled"] is True
+    assert response.json()["web_search_enabled"] is False
+
+    profile = await client.get("/api/v1/me", headers=headers)
+    assert profile.status_code == 200
+    assert profile.json()["web_search_enabled"] is False

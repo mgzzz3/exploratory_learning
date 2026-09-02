@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db
+from app.api.deps import get_current_user, get_db, get_generation_strategy
 from app.api.request_lifecycle import run_until_disconnect
 from app.core.errors import AppError
 from app.core.observability import request_id as current_request_id, note_admission
@@ -25,6 +25,7 @@ from app.services.game import (
     get_owned_game,
     revive_with_ad,
 )
+from app.services.generation_strategy import QuestionGenerationStrategy
 
 router = APIRouter(prefix="/games", tags=["games"])
 
@@ -35,6 +36,7 @@ async def create(
     request: Request,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    strategy: QuestionGenerationStrategy = Depends(get_generation_strategy),
 ) -> GameOut:
     request_id = current_request_id()
     async def operation():
@@ -42,7 +44,7 @@ async def create(
             return await create_game(
                 db, user=user, topic=payload.topic,
                 wechat=request.app.state.wechat_client,
-                strategy=request.app.state.generation_strategy,
+                strategy=strategy,
             )
         except AppError as exc:
             settings = request.app.state.settings
